@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Kamal Badminton Hub | Order Form</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<section class="order-section">
+
+<div class="order-box">
+
+<div class="form-header">
+
+<img src="Images/logo.png" class="logo">
+
+<h1>KAMAL BADMINTON HUB</h1>
+
+<p>Fill the Form</p>
+
+</div>
+
+<form id="orderForm">
+
+<!-- Product Name -->
+
+<div class="input-box">
+
+<label>Product Name</label>
+
+<input type="text" id="product" readonly>
+
+</div>
+
+<!-- Price -->
+
+<div class="input-box">
+
+<label>Price</label>
+
+<input type="text" id="price" readonly>
+
+</div>
+
+<!-- Order ID -->
+
+<div class="input-box">
+
+<label>Order ID</label>
+
+<input type="text" id="orderid" readonly>
+
+</div>
+
+<!-- Date & Time -->
+
+<div class="input-box">
+
+<label>Order Date & Time</label>
+
+<input type="text" id="datetime" readonly>
+
+</div>
+
+<!-- Name -->
+
+<div class="input-box">
+
+<label>Full Name</label>
+
+<input type="text"
+id="name"
+placeholder="Enter Full Name"
+required>
+
+</div>
+
+<!-- Phone -->
+
+<div class="input-box">
+
+<label>Phone Number</label>
+
+<input type="tel"
+id="phone"
+placeholder="Enter Phone Number"
+required>
+
+</div>
+
+<!-- Email -->
+
+<div class="input-box">
+
+<label>Email</label>
+
+<input type="email"
+id="email"
+placeholder="Enter Email"
+required>
+
+</div>
+
+<!-- Address -->
+
+<div class="input-box">
+
+<label>Full Address</label>
+
+<textarea
+id="address"
+rows="3"
+placeholder="Enter Full Address"
+required></textarea>
+
+</div>
+
+<!-- PIN -->
+
+<div class="input-box">
+
+<label>PIN Code</label>
+
+<input type="number"
+id="pincode"
+placeholder="Enter PIN Code"
+required>
+
+</div>
+
+<!-- Delivery -->
+
+<h3>Delivery Option</h3>
+
+<div class="input-box">
+
+<select id="delivery">
+
+<option value="Prepaid (Free Delivery)">
+Prepaid (Free Delivery)
+</option>
+
+<option value="COD (25% Advance + ₹1000 COD Charge)">
+COD (25% Advance + ₹1000 COD Charge)
+</option>
+
+</select>
+
+</div>
+
+<!-- Payment -->
+
+<h3>Payment Details</h3>
+
+<div class="payment-box">
+
+<img src="Images/qrcode.jpg" class="qr-code">
+
+<p>Scan the QR Code and complete the payment.</p>
+
+<label>Transaction ID</label>
+
+<input type="text"
+id="transaction"
+placeholder="Enter UPI Transaction ID"
+required>
+
+</div>
+
+<!-- Notes -->
+
+<div class="input-box">
+
+<label>Additional Notes</label>
+
+<textarea
+id="notes"
+rows="4"
+placeholder="Write anything..."></textarea>
+
+</div>
+
+<button
+type="button"
+class="submit-btn"
+onclick="sendWhatsApp()">
+
+<i class="fab fa-whatsapp"></i>
+
+Place Order
+
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+<script src="script.js"></script>
+
+</body>
+</html>

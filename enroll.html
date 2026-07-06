@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Enrollment | Kamal Shuttler Academy</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+<section class="enroll-section">
+
+<div class="form-box">
+
+<div class="form-header">
+
+<img src="Images/logo.png" class="logo">
+
+<h1>KAMAL BADMINTON HUB</h1>
+<p id="formHeading">Fill the Form</p>
+
+</div>
+
+<form id="enrollForm">
+
+
+    <div class="input-box">
+
+<label>Product Name</label>
+
+<input type="text" id="product" readonly>
+
+<label>Price</label>
+
+<input type="text" id="price" readonly>
+
+</div>
+
+<div class="input-box">
+
+<label>Order ID</label>
+
+<input
+type="text"
+id="orderid"
+readonly>
+
+</div>
+
+<div class="input-box">
+
+<label>Order Date & Time</label>
+
+<input
+type="text"
+id="datetime"
+readonly>
+
+</div>
+<div class="input-box">
+<label>Full Name</label>
+<input type="text" id="name" placeholder="Enter Full Name" required>
+</div>
+
+<div class="input-box">
+<label>Phone Number</label>
+<input type="tel" id="phone" placeholder="Enter Phone Number" required>
+</div>
+
+<div class="input-box">
+<label>Email</label>
+<input type="email" id="email" placeholder="Enter Email" required>
+</div>
+
+<div class="input-box">
+<label>Full Address</label>
+<textarea id="address" rows="3" placeholder="Enter Address" required></textarea>
+</div>
+
+<div class="input-box">
+<label>PIN Code</label>
+<input type="number" id="pincode" placeholder="Enter PIN Code" required>
+</div>
+
+<div class="input-box">
+<label>Select Delivery Option</label>
+<select id="delivery">
+<option value="Prepaid">Prepaid (Free Delivery)</option>
+<option value="COD">COD (25% Prepayment + ₹1000 COD Charge)</option>
+</select>
+</div>
+
+<div class="input-box full">
+<h3>Payment Details</h3>
+
+<div class="payment-box">
+<img src="Images/qrcode.jpg" class="qr-code">
+
+<p>Scan QR & Complete Payment</p>
+<label>Transaction ID</label>
+
+<input
+type="text"
+id="transaction"
+placeholder="Enter UPI Transaction ID"
+required>
+
+<div class="input-box">
+
+<label>Payment Screenshot</label>
+
+<input
+type="file"
+id="paymentScreenshot"
+accept="image/*"
+required>
+
+<p class="upload-note">
+Upload Payment Screenshot (JPG, PNG, JPEG)
+</p>
+
+</div>
+
+</div>
+
+<div class="input-box full">
+<label>Additional Notes</label>
+
+<textarea id="notes" rows="4" placeholder="Write anything..."></textarea>
+</div>
+
+<button
+type="button"
+class="submit-btn"
+onclick="sendWhatsApp()">
+
+<i class="fab fa-whatsapp"></i>
+
+Submit Enrollment
+
+</button>
+
+</form>
+
+</div>
+
+</section>
+
+<script src="script.js"></script>
+
+</body>
+</html>
