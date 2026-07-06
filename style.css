@@ -1744,3 +1744,13 @@ input[type="file"]::file-selector-button{
 input[type="file"]::file-selector-button:hover{
     background:#087a39;
 }
+.buy-btn{
+    background:#00b050;
+    color:white;
+    border:none;
+    padding:12px 30px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:18px;
+    font-weight:bold;
+}
