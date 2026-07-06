@@ -27,8 +27,15 @@ nav{
     gap:35px;
 }
 
-.logo img{
-width:80px;
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 130px;
+    height: auto;
+    display: block;
 }
 
 nav a{
