@@ -1754,3 +1754,37 @@ input[type="file"]::file-selector-button:hover{
     font-size:18px;
     font-weight:bold;
 }
+
+.course-video{
+    width:85%;
+    margin:auto;
+    padding:50px 0;
+    text-align:center;
+}
+
+.course-video h1{
+    color:#fff;
+    margin-bottom:30px;
+}
+
+.course-video {
+    width:100%;
+    max-width:900px;
+    border-radius:12px;
+    box-shadow:0 0 20px rgba(0,0,0,.4);
+}
+
+.course-video button{
+    margin-top:25px;
+    padding:12px 30px;
+    border:none;
+    border-radius:8px;
+    background:red;
+    color:white;
+    font-size:18px;
+    cursor:pointer;
+}
+
+.course-video button:hover{
+    background:#c40000;
+}
