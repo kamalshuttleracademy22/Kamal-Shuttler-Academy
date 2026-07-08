@@ -2795,3 +2795,18 @@ color:#fff;
 .certificate-btn:hover{
 background:#1ebe5d;
 }
+.business-logo{
+text-align:center;
+margin-bottom:25px;
+}
+
+.business-logo img{
+width:140px;
+height:auto;
+display:inline-block;
+transition:0.3s;
+}
+
+.business-logo img:hover{
+transform:scale(1.08);
+}
