@@ -729,11 +729,28 @@ line-height:40px;
 
 header{
 padding:15px 5%;
-flex-direction:column;
 }
 
 nav{
-margin:20px 0;
+display:flex;
+flex-wrap:nowrap;
+overflow-x:auto;
+overflow-y:hidden;
+white-space:nowrap;
+gap:20px;
+margin:15px 0;
+scrollbar-width:none;
+-webkit-overflow-scrolling:touch;
+}
+
+nav::-webkit-scrollbar{
+display:none;
+}
+
+nav a{
+flex:0 0 auto;
+font-size:16px;
+padding:8px 0;
 }
 
 .hero{
@@ -744,6 +761,8 @@ padding-top:180px;
 
 .hero-text{
 width:100%;
+}
+
 }
 
 .hero-image{
@@ -778,7 +797,6 @@ flex-direction:column;
 width:100%;
 }
 
-}
 section{
 
 animation:fadeUp 1s ease;
