@@ -1,0 +1,24 @@
+{
+  "name": "kamal-shuttler-academy",
+  "version": "1.0.0",
+  "description": "",
+  "main": "order.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kamalshuttleracademy22/kamal-shuttler-Academy.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kamalshuttleracademy22/kamal-shuttler-Academy/issues"
+  },
+  "homepage": "https://github.com/kamalshuttleracademy22/kamal-shuttler-Academy#readme",
+  "dependencies": {
+    "@supabase/supabase-js": "^2.117.2"
+  }
+}
