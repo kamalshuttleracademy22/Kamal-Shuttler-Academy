@@ -62,55 +62,95 @@ async function placeOrder() {
     let transaction = document.getElementById("transaction").value.trim();
     let notes = document.getElementById("notes").value.trim();
 
-    // Required fields
+    // Payment screenshot
+    const screenshotInput = document.getElementById("paymentScreenshot");
+
     if (!name || !phone || !email || !address || !pincode || !transaction) {
-
         alert("Please fill all required fields.");
-
         return;
     }
 
-    // Prepare order data
+    if (!screenshotInput || !screenshotInput.files.length) {
+        alert("Please upload payment screenshot.");
+        return;
+    }
+
+    const screenshotFile = screenshotInput.files[0];
+
+    if (!screenshotFile.type.startsWith("image/")) {
+        alert("Please upload a valid image file.");
+        return;
+    }
+
+   // Maximum 3 MB
+if (screenshotFile.size > 3 * 1024 * 1024) {
+    alert("Payment screenshot must be less than 3 MB.");
+    return;
+}
+
+    // Convert image to Base64
+    const screenshotBase64 = await fileToBase64(screenshotFile);
+
     const formData = {
-
         form_type: "product_order",
-
         product: product,
         price: price,
         order_id: orderid,
         order_date: datetime,
-
         name: name,
         phone: phone,
         email: email,
-
         address: address,
         pincode: pincode,
-
         delivery: delivery,
-
         transaction_id: transaction,
+        notes: notes || "N/A",
 
-        notes: notes || "N/A"
+        payment_screenshot: {
+            file: screenshotBase64,
+            fileName: screenshotFile.name,
+            contentType: screenshotFile.type
+        }
     };
 
-    // Save directly to Supabase
     const saved = await saveToSupabase(formData);
 
     if (!saved) {
-
         alert("Order save nahi ho paya. Please try again.");
-
         return;
     }
 
-    // Success
     alert(
         "✅ Order submitted successfully!\n\n" +
         "Order ID: " + orderid
     );
-
 }
+
+
+// ==========================
+// FILE TO BASE64
+// ==========================
+
+function fileToBase64(file) {
+
+    return new Promise((resolve, reject) => {
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            const base64String = reader.result.split(",")[1];
+            resolve(base64String);
+        };
+
+        reader.onerror = () => {
+            reject(new Error("Unable to read payment screenshot."));
+        };
+
+        reader.readAsDataURL(file);
+    });
+}
+
+
 // ==========================
 // SAVE FORM DATA TO SUPABASE
 // ==========================
@@ -119,38 +159,43 @@ async function saveToSupabase(formData) {
 
     try {
 
-        const response = await fetch("/.netlify/functions/submit-form", {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify(formData)
-
-        });
+        const response = await fetch(
+            "/.netlify/functions/submit-form",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            }
+        );
 
         const result = await response.json();
 
         if (!response.ok || !result.success) {
 
-            console.error("Supabase save failed:", result);
+            console.error(
+                "Supabase save failed:",
+                result
+            );
 
             return false;
-
         }
 
-        console.log("Form saved successfully:", result);
+        console.log(
+            "Form saved successfully:",
+            result
+        );
 
         return true;
 
     } catch (error) {
 
-        console.error("Connection error:", error);
+        console.error(
+            "Connection error:",
+            error
+        );
 
         return false;
-
     }
-
 }
