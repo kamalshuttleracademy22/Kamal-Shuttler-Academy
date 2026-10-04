@@ -253,3 +253,10 @@ async function saveToSupabase(formData) {
         return false;
     }
 }
+function closeMaldivesPopup() {
+    const popup = document.getElementById("maldivesPopup");
+
+    if (popup) {
+        popup.style.display = "none";
+    }
+}
