@@ -62,48 +62,82 @@ async function placeOrder() {
     let transaction = document.getElementById("transaction").value.trim();
     let notes = document.getElementById("notes").value.trim();
 
-    // Payment screenshot
-    const screenshotInput = document.getElementById("paymentScreenshot");
+    // Check which form is being submitted
+    const isEnrollmentForm =
+        document.getElementById("enrollForm") !== null;
 
-    if (!name || !phone || !email || !address || !pincode || !transaction) {
+    // Payment screenshot
+    const screenshotInput =
+        document.getElementById("paymentScreenshot");
+
+    // Required fields
+    if (
+        !name ||
+        !phone ||
+        !email ||
+        !address ||
+        !pincode ||
+        !transaction
+    ) {
         alert("Please fill all required fields.");
         return;
     }
 
-    if (!screenshotInput || !screenshotInput.files.length) {
+    // Screenshot required
+    if (
+        !screenshotInput ||
+        !screenshotInput.files.length
+    ) {
         alert("Please upload payment screenshot.");
         return;
     }
 
-    const screenshotFile = screenshotInput.files[0];
+    const screenshotFile =
+        screenshotInput.files[0];
 
+    // Image check
     if (!screenshotFile.type.startsWith("image/")) {
         alert("Please upload a valid image file.");
         return;
     }
 
-   // Maximum 3 MB
-if (screenshotFile.size > 3 * 1024 * 1024) {
-    alert("Payment screenshot must be less than 3 MB.");
-    return;
-}
+    // Maximum 3 MB
+    if (screenshotFile.size > 3 * 1024 * 1024) {
+        alert(
+            "Payment screenshot must be less than 3 MB."
+        );
+        return;
+    }
 
-    // Convert image to Base64
-    const screenshotBase64 = await fileToBase64(screenshotFile);
+    // Convert screenshot to Base64
+    const screenshotBase64 =
+        await fileToBase64(screenshotFile);
 
+    // Enrollment or Product Order
     const formData = {
-        form_type: "product_order",
+
+        form_type: isEnrollmentForm
+            ? "course_enrollment"
+            : "product_order",
+
         product: product,
         price: price,
+
         order_id: orderid,
+
         order_date: datetime,
+
         name: name,
         phone: phone,
         email: email,
+
         address: address,
         pincode: pincode,
+
         delivery: delivery,
+
         transaction_id: transaction,
+
         notes: notes || "N/A",
 
         payment_screenshot: {
@@ -113,20 +147,36 @@ if (screenshotFile.size > 3 * 1024 * 1024) {
         }
     };
 
-    const saved = await saveToSupabase(formData);
+    const saved =
+        await saveToSupabase(formData);
 
     if (!saved) {
-        alert("Order save nahi ho paya. Please try again.");
+
+        alert(
+            isEnrollmentForm
+                ? "Enrollment Can't Save. Please try again."
+                : "Order Can't Save. Please try again."
+        );
+
         return;
     }
 
-    alert(
-        "✅ Order submitted successfully!\n\n" +
-        "Order ID: " + orderid
-    );
+    // Success message
+    if (isEnrollmentForm) {
+
+        alert(
+            "✅ Enrollment submitted successfully!\n\n" +
+            "Enrollment ID: " + orderid
+        );
+
+    } else {
+
+        alert(
+            "✅ Order submitted successfully!\n\n" +
+            "Order ID: " + orderid
+        );
+    }
 }
-
-
 // ==========================
 // FILE TO BASE64
 // ==========================
@@ -143,7 +193,9 @@ function fileToBase64(file) {
         };
 
         reader.onerror = () => {
-            reject(new Error("Unable to read payment screenshot."));
+            reject(
+                new Error("Unable to read payment screenshot.")
+            );
         };
 
         reader.readAsDataURL(file);
@@ -163,9 +215,11 @@ async function saveToSupabase(formData) {
             "/.netlify/functions/submit-form",
             {
                 method: "POST",
+
                 headers: {
                     "Content-Type": "application/json"
                 },
+
                 body: JSON.stringify(formData)
             }
         );
