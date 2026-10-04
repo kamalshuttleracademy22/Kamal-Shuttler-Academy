@@ -1,7 +1,5 @@
-const { createClient } = require("@supabase/supabase-js");
-
 exports.handler = async (event) => {
-    // Only allow POST requests
+    // Sirf POST request allow hai
     if (event.httpMethod !== "POST") {
         return {
             statusCode: 405,
@@ -16,10 +14,11 @@ exports.handler = async (event) => {
     }
 
     try {
-        // Read Supabase credentials from Netlify environment variables
+        // Supabase settings
         const supabaseUrl = process.env.SUPABASE_URL;
         const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+        // Check environment variables
         if (!supabaseUrl || !supabaseKey) {
             console.error("Supabase environment variables are missing.");
 
@@ -35,15 +34,16 @@ exports.handler = async (event) => {
             };
         }
 
-        const supabase = createClient(
-            supabaseUrl,
-            supabaseKey
+        console.log("SUPABASE URL:", supabaseUrl);
+        console.log(
+            "SUPABASE KEY TYPE:",
+            supabaseKey.substring(0, 10) + "********"
         );
 
-        // Read submitted form data
+        // Form data receive karo
         const data = JSON.parse(event.body || "{}");
 
-        // Basic validation
+        // Form type check
         if (!data.form_type) {
             return {
                 statusCode: 400,
@@ -57,18 +57,32 @@ exports.handler = async (event) => {
             };
         }
 
-        // Save submission
-        const { error } = await supabase
-            .from("form_submissions")
-            .insert([
-                {
+        // Supabase REST API
+        const response = await fetch(
+            `${supabaseUrl}/rest/v1/form_submissions`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "apikey": supabaseKey,
+                    "Prefer": "return=minimal"
+                },
+                body: JSON.stringify({
                     form_type: data.form_type,
                     data: data
-                }
-            ]);
+                })
+            }
+        );
 
-        if (error) {
-            console.error("Supabase error:", error);
+        const responseText = await response.text();
+
+        // Supabase error
+        if (!response.ok) {
+            console.error(
+                "Supabase REST error:",
+                response.status,
+                responseText
+            );
 
             return {
                 statusCode: 500,
@@ -81,6 +95,9 @@ exports.handler = async (event) => {
                 })
             };
         }
+
+        // Success
+        console.log("Form saved successfully.");
 
         return {
             statusCode: 200,

@@ -45,81 +45,112 @@ if (heading) {
 function generateOrderID() {
     return "KBH" + Math.floor(100000 + Math.random() * 900000);
 }
+async function sendWhatsApp() {
 
-// Send to WhatsApp
-function sendWhatsApp() {
-
-    let product = document.getElementById("product").value.trim();
-    let price = document.getElementById("price").value.trim();
+    let product = document.getElementById("product").value;
+    let price = document.getElementById("price").value;
     let orderid = document.getElementById("orderid").value;
     let datetime = document.getElementById("datetime").value;
+
     let name = document.getElementById("name").value.trim();
     let phone = document.getElementById("phone").value.trim();
     let email = document.getElementById("email").value.trim();
     let address = document.getElementById("address").value.trim();
     let pincode = document.getElementById("pincode").value.trim();
+
     let delivery = document.getElementById("delivery").value;
-    let transaction =
-document.getElementById("transaction").value;
+    let transaction = document.getElementById("transaction").value.trim();
     let notes = document.getElementById("notes").value.trim();
-    let screenshot = document.getElementById("paymentScreenshot").files.length;
 
-if (screenshot == 0) {
-    alert("Please upload payment screenshot.");
-    return;
-}
+    // Required fields
+    if (!name || !phone || !email || !address || !pincode || !transaction) {
 
-    // Validation
-    if (!name || !phone || !email || !address || !pincode) {
         alert("Please fill all required fields.");
+
         return;
     }
-    let whatsapp = "918797072208";
-let message = `
 
-🏸 KAMAL SHUTTLER ACADEMY
+    // Prepare order data
+    const formData = {
 
-🛒 Product :
-${product}
+        form_type: "product_order",
 
-💰 Price :
-${price}
+        product: product,
+        price: price,
+        order_id: orderid,
+        order_date: datetime,
 
-🆔 Order ID :
-${orderid}
+        name: name,
+        phone: phone,
+        email: email,
 
-📅 Date & Time :
-${datetime}
+        address: address,
+        pincode: pincode,
 
-👤 Name :
-${name}
+        delivery: delivery,
 
-📞 Phone :
-${phone}
+        transaction_id: transaction,
 
-📧 Email :
-${email}
+        notes: notes || "N/A"
+    };
 
-📍 Address :
-${address}
+    // Save directly to Supabase
+    const saved = await saveToSupabase(formData);
 
-📮 PIN :
-${pincode}
+    if (!saved) {
 
-🚚 Delivery :
-${delivery}
+        alert("Order save nahi ho paya. Please try again.");
 
-💳 Transaction ID :
-${transaction}
+        return;
+    }
 
-📝 Notes :
-${notes || "N/A"}
+    // Success
+    alert(
+        "✅ Order submitted successfully!\n\n" +
+        "Order ID: " + orderid
+    );
 
-❤️ Thank You
-KAMAL SHUTTLER ACADEMY
+}
+// ==========================
+// SAVE FORM DATA TO SUPABASE
+// ==========================
 
-`;
-let url = `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}`;
+async function saveToSupabase(formData) {
 
-window.open(url, "_blank");
+    try {
+
+        const response = await fetch("/.netlify/functions/submit-form", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(formData)
+
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+
+            console.error("Supabase save failed:", result);
+
+            return false;
+
+        }
+
+        console.log("Form saved successfully:", result);
+
+        return true;
+
+    } catch (error) {
+
+        console.error("Connection error:", error);
+
+        return false;
+
+    }
+
 }
