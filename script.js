@@ -45,7 +45,7 @@ if (heading) {
 function generateOrderID() {
     return "KBH" + Math.floor(100000 + Math.random() * 900000);
 }
-async function sendWhatsApp() {
+async function placeOrder() {
 
     let product = document.getElementById("product").value;
     let price = document.getElementById("price").value;
