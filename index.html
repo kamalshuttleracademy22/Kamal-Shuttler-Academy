@@ -386,40 +386,27 @@ Bokaro, Jharkhand – 827013
 </p>
 
 <p>
-📞 <strong>Phone</strong><br>
-+91 87970 72208
-</p>
-
-<p>
 ✉️ <strong>Email</strong><br>
-owaishasankamal@icloud.com
-</p>
-
-<p>
-
-<p><i class="fas fa-phone"></i>
-+91 87970 72208
-</p>
-
-<p><i class="fas fa-envelope"></i>
-owaishasankamal@icloud.com
+<a href="mailto:ksba.coachkamal@gmail.com">
+ksba.coachkamal@gmail.com
+</a>
 </p>
 
 <div class="social">
 
-<a href="https://www.instagram.com/coach_kamal.shuttler" target="_blank">
+<a href="https://www.instagram.com/coach_kamal.shuttler" target="_blank" rel="noopener noreferrer">
 <i class="fab fa-instagram"></i>
 </a>
 
-<a href="https://youtube.com/@coachkamalshuttler" target="_blank">
+<a href="https://youtube.com/@coachkamalshuttler" target="_blank" rel="noopener noreferrer">
 <i class="fab fa-youtube"></i>
 </a>
 
-<a href="https://www.facebook.com/share/1DLoi4qCZQ/" target="_blank">
+<a href="https://www.facebook.com/share/1DLoi4qCZQ/" target="_blank" rel="noopener noreferrer">
 <i class="fab fa-facebook"></i>
 </a>
 
-<a href="https://www.linkedin.com/in/owais-hasan-kamal-6b020035a" target="_blank">
+<a href="https://www.linkedin.com/in/owais-hasan-kamal-6b020035a" target="_blank" rel="noopener noreferrer">
 <i class="fab fa-linkedin"></i>
 </a>
 
@@ -434,37 +421,110 @@ Fill out the form below and our team will contact you within
 24 hours.
 </p>
 
-<form action="https://formsubmit.co/kamalshuttler22@gmail.com"></form>
+<form id="contactForm">
 
-    <input type="text" name="name" placeholder="Your Name" required>
+<input
+type="text"
+name="name"
+placeholder="Your Name"
+required
+>
 
-    <input type="email" name="email" placeholder="Your Email" required>
+<input
+type="email"
+name="email"
+placeholder="Your Email"
+required
+>
 
-    <input type="tel" name="phone" placeholder="Phone Number" required>
+<input
+type="tel"
+name="phone"
+placeholder="Phone Number"
+required
+>
 
-    <textarea name="message" rows="6" placeholder="Your Message" required></textarea>
+<textarea
+name="message"
+rows="6"
+placeholder="Your Message"
+required
+></textarea>
 
-    <!-- Disable Captcha -->
-    <input type="hidden" name="_captcha" value="false">
+<button type="submit" class="btn" id="contactSubmitButton">
+Send Message
+</button>
 
-    <!-- Redirect after submit -->
-    <input type="hidden" name="_next" value="thankyou.html">
-
-    <button type="submit" class="btn">Send Message</button>
-
-    <p class="contact-note">
+<p id="contactFormMessage" class="contact-note" role="status">
 ✅ We usually respond within 24 hours.
 </p>
 
 </form>
 
-</div>
-
-</div>
-
 </section>
-</iframe>
 
+<script>
+
+const contactForm = document.getElementById("contactForm");
+
+contactForm.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const button = document.getElementById("contactSubmitButton");
+    const message = document.getElementById("contactFormMessage");
+
+    button.disabled = true;
+    button.textContent = "Sending...";
+    message.textContent = "Please wait. Your message is being sent.";
+
+    try {
+
+        const formData = new FormData(contactForm);
+
+        const data = Object.fromEntries(formData.entries());
+
+        const response = await fetch("/.netlify/functions/submit-form", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                form_type: "contact_message",
+                data: data
+            })
+
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Message could not be sent.");
+        }
+
+        contactForm.reset();
+
+        message.textContent = "✅ Your message has been sent successfully!";
+
+        button.textContent = "Message Sent";
+
+    } catch (error) {
+
+        console.error("Contact form error:", error);
+
+        message.textContent = error.message || "Something went wrong. Please try again.";
+
+        button.disabled = false;
+        button.textContent = "Send Message";
+
+    }
+
+});
+
+</script>
 <!-- ================= GALLERY ================= -->
 
 <section class="achievement" id="achievements"></section>

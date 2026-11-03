@@ -2,15 +2,10 @@
 <html lang="en">
 
 <head>
-
 <meta charset="UTF-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Job Application | Kamal Shuttler Academy</title>
-
 <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
@@ -23,55 +18,31 @@
 
 <h1>Job Application Form</h1>
 
-<p>
-
-Find Your Dream Job With Us
-
-</p>
+<p>Find Your Dream Job With Us</p>
 
 <p>
-
 Are you looking for a badminton coaching or sports job?
-
 Fill out the complete form below and upload your resume.
-
 We will contact you if a suitable opportunity is available.
-
 </p>
 
-<form action="https://formsubmit.co/kamalshuttler22@gmail.com"
-      method="POST"
-      enctype="multipart/form-data">
-
-<input type="hidden" name="_subject" value="New Job Application - Kamal Shuttler Academy">
-
-<input type="hidden" name="_captcha" value="false">
-
-<input type="hidden" name="_template" value="table">
-
-<input type="hidden" name="_next" value="https://kamalshuttleracademy.com/thankyou.html">
-
-<!-- Personal Details -->
+<form id="jobApplicationForm">
 
 <h2>👤 Personal Details</h2>
 
 <input type="text" name="Full Name" placeholder="Full Name" required>
 
-<input type="number" name="Age" placeholder="Age" required>
+<input type="number" name="Age" placeholder="Age" min="18" required>
 
-<input type="tel" name="Mobile Number" placeholder="Mobile Number">
+<input type="tel" name="Mobile Number" placeholder="Mobile Number" required>
 
-<input type="tel" name="WhatsApp Number" placeholder="WhatsApp Number">
-
-<input type="email" name="Email" placeholder="Email ID">
+<input type="email" name="Email" placeholder="Email ID" required>
 
 <input type="text" name="Current Location" placeholder="Current Location (City & Country)">
 
-<!-- Professional -->
-
 <h2>💼 Professional Details</h2>
 
-<input type="text" name="Job Position" placeholder="Job Position / Role You Are Looking For">
+<input type="text" name="Job Position" placeholder="Job Position / Role You Are Looking For" required>
 
 <input type="text" name="Current Profession" placeholder="Current Profession">
 
@@ -83,87 +54,58 @@ We will contact you if a suitable opportunity is available.
 
 <input type="text" name="Previous Company" placeholder="Previous Company / Academy">
 
-<!-- Job Preference -->
-
 <h2>📍 Job Preference</h2>
 
 <input type="text" name="Preferred Job Location" placeholder="Preferred Job Location">
 
 <label>
-
-<input type="checkbox">
-
+<input type="checkbox" name="Job Type" value="Full Time">
 Full Time
-
 </label>
 
 <label>
-
-<input type="checkbox">
-
+<input type="checkbox" name="Job Type" value="Part Time">
 Part Time
-
 </label>
 
 <label>
-
-<input type="checkbox">
-
+<input type="checkbox" name="Job Type" value="Contract">
 Contract
-
 </label>
 
 <label>
-
-<input type="checkbox">
-
+<input type="checkbox" name="Job Type" value="Internship">
 Internship
-
 </label>
 
 <input type="text" name="Expected Salary" placeholder="Expected Salary">
 
 <input type="text" name="Minimum Acceptable Salary" placeholder="Minimum Acceptable Salary">
 
-<!-- Accommodation -->
-
 <h2>🏠 Accommodation & Food</h2>
 
 <label>
-
-<input type="checkbox">
-
+<input type="checkbox" name="Accommodation Required" value="Yes">
 Accommodation Required
-
 </label>
 
 <label>
-
-<input type="checkbox">
-
+<input type="checkbox" name="Food Required" value="Yes">
 Food Required
-
 </label>
 
 <textarea name="Food & Accommodation Requirement" placeholder="Any Specific Requirement"></textarea>
-
-<!-- Joining -->
 
 <h2>📅 Joining Details</h2>
 
 <input type="text" name="Joining Date" placeholder="When Can You Join?">
 
 <label>
-
-<input type="checkbox">
-
+<input type="checkbox" name="Currently Working" value="Yes">
 Currently Working
-
 </label>
 
 <input type="text" name="Notice Period" placeholder="Notice Period">
-
-<!-- About -->
 
 <h2>📝 Additional Information</h2>
 
@@ -171,46 +113,162 @@ Currently Working
 
 <textarea name="Other Expectations" placeholder="Other Expectations"></textarea>
 
-<!-- Upload -->
-
 <h2>📎 Upload Documents</h2>
 
 <label>Upload Resume (PDF)</label>
-
-<input type="file" name="Resume" accept=".pdf">
+<input type="file" id="resume" accept=".pdf" required>
 
 <label>Upload Certificates</label>
-
-<input type="file" name="Certificates">
+<input type="file" id="certificates" multiple>
 
 <label>Upload Photo</label>
-
-<input type="file" name="Photo" accept="image/*">
-
-<!-- Terms -->
+<input type="file" id="photo" accept="image/*">
 
 <label>
-
-<input type="checkbox" required>
-
+<input type="checkbox" name="Terms Accepted" value="Yes" required>
 I agree to the Terms & Conditions
-
 </label>
 
 <br><br>
 
-<button type="submit">
-
+<button type="submit" id="applyButton">
 Apply Now
-
 </button>
+
+<p id="formMessage" role="status"></p>
 
 </form>
 
 </div>
-
 </section>
 
-</body>
+<script>
 
+const jobForm = document.getElementById("jobApplicationForm");
+
+jobForm.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const button = document.getElementById("applyButton");
+    const message = document.getElementById("formMessage");
+
+    const resume = document.getElementById("resume").files[0];
+    const certificates = Array.from(
+        document.getElementById("certificates").files
+    );
+    const photo = document.getElementById("photo").files[0];
+
+    const files = [
+        resume,
+        ...certificates,
+        ...(photo ? [photo] : [])
+    ].filter(Boolean);
+
+    const totalSize = files.reduce((total, file) => total + file.size, 0);
+
+    if (totalSize > 2 * 1024 * 1024) {
+        message.textContent = "Please keep all uploaded documents together under 2 MB.";
+        return;
+    }
+
+    if (files.some(file => file.size > 2 * 1024 * 1024)) {
+        message.textContent = "Each uploaded file must be under 2 MB.";
+        return;
+    }
+
+    if (resume.type !== "application/pdf") {
+        message.textContent = "Please upload your resume in PDF format.";
+        return;
+    }
+
+    button.disabled = true;
+    button.textContent = "Submitting...";
+    message.textContent = "Please wait. Your application is being submitted.";
+
+    try {
+
+        const formData = new FormData(jobForm);
+        const data = {};
+
+        for (const [key, value] of formData.entries()) {
+
+            if (data[key]) {
+                data[key] = Array.isArray(data[key])
+                    ? [...data[key], value]
+                    : [data[key], value];
+            } else {
+                data[key] = value;
+            }
+
+        }
+
+        const attachments = [];
+
+        for (const file of files) {
+
+            const base64 = await new Promise((resolve, reject) => {
+
+                const reader = new FileReader();
+
+                reader.onload = () => {
+                    resolve(reader.result.split(",")[1]);
+                };
+
+                reader.onerror = () => {
+                    reject(new Error("Unable to read uploaded file."));
+                };
+
+                reader.readAsDataURL(file);
+
+            });
+
+            attachments.push({
+                fileName: file.name,
+                contentType: file.type || "application/octet-stream",
+                file: base64
+            });
+
+        }
+
+        const response = await fetch("/.netlify/functions/submit-form", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                form_type: "job_application",
+                data: data,
+                attachments: attachments
+            })
+
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.success) {
+            throw new Error(result.message || "Application submission failed.");
+        }
+
+        window.location.href = "thankyou.html";
+
+    } catch (error) {
+
+        console.error("Job application error:", error);
+
+        message.textContent = error.message || "Something went wrong. Please try again.";
+
+        button.disabled = false;
+        button.textContent = "Apply Now";
+
+    }
+
+});
+
+</script>
+
+</body>
 </html>

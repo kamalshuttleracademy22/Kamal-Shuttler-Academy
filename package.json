@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/kamalshuttleracademy22/kamal-shuttler-Academy#readme",
   "dependencies": {
-    "@supabase/supabase-js": "^2.117.2"
+    "nodemailer": "^10.3.1"
+  },
+  "devDependencies": {
+    "netlify-cli": "^27.16.2"
   }
 }

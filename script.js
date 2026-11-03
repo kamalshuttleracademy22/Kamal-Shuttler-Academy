@@ -1,27 +1,62 @@
-window.onload = function(){
-
-document.body.style.opacity="1";
-
-}
 // ==========================
 // KAMAL SHUTTLER ACADEMY
 // script.js
+// Gmail Submission Version
 // ==========================
 
-// Auto Course Name from URL
+window.onload = function () {
+    document.body.style.opacity = "1";
+};
+
+
+// ==========================
+// AUTO COURSE / PRODUCT DETAILS
+// ==========================
 const params = new URLSearchParams(window.location.search);
 
-const product = params.get("product");
-const price = params.get("price");
+const product =
+    params.get("product") ||
+    params.get("course") ||
+    "";
 
-if (product) {
-    document.getElementById("product").value = decodeURIComponent(product);
-    document.getElementById("price").value = "₹" + price;
+const price = params.get("price") || "";
+
+const productInput = document.getElementById("product");
+const priceInput = document.getElementById("price");
+
+if (productInput && product) {
+    productInput.value = product;
 }
 
-document.getElementById("orderid").value = generateOrderID();
-document.getElementById("datetime").value = new Date().toLocaleString();
-// Change heading automatically
+if (priceInput && price) {
+    priceInput.value = "₹" + price;
+}
+
+// ==========================
+// ORDER ID GENERATOR
+// ==========================
+
+function generateOrderID() {
+    return "KBH" + Math.floor(100000 + Math.random() * 900000);
+}
+
+const orderInput = document.getElementById("orderid");
+
+if (orderInput) {
+    orderInput.value = generateOrderID();
+}
+
+const dateInput = document.getElementById("datetime");
+
+if (dateInput) {
+    dateInput.value = new Date().toLocaleString();
+}
+
+
+// ==========================
+// AUTOMATIC FORM HEADING
+// ==========================
+
 const heading = document.getElementById("formHeading");
 
 if (heading) {
@@ -39,144 +74,177 @@ if (heading) {
         heading.innerText = "Fill The Form";
 
     }
+}
 
-}
-// Generate Order ID
-function generateOrderID() {
-    return "KBH" + Math.floor(100000 + Math.random() * 900000);
-}
+
+// ==========================
+// PLACE ORDER / ENROLLMENT
+// ==========================
+
 async function placeOrder() {
 
-    let product = document.getElementById("product").value;
-    let price = document.getElementById("price").value;
-    let orderid = document.getElementById("orderid").value;
-    let datetime = document.getElementById("datetime").value;
+    const product = document.getElementById("product")?.value || "";
+    const price = document.getElementById("price")?.value || "";
 
-    let name = document.getElementById("name").value.trim();
-    let phone = document.getElementById("phone").value.trim();
-    let email = document.getElementById("email").value.trim();
-    let address = document.getElementById("address").value.trim();
-    let pincode = document.getElementById("pincode").value.trim();
+    const orderid = document.getElementById("orderid")?.value || "";
+    const datetime = document.getElementById("datetime")?.value || "";
 
-    let delivery = document.getElementById("delivery").value;
-    let transaction = document.getElementById("transaction").value.trim();
-    let notes = document.getElementById("notes").value.trim();
+    const name = document.getElementById("name")?.value.trim() || "";
+    const phone = document.getElementById("phone")?.value.trim() || "";
+    const email = document.getElementById("email")?.value.trim() || "";
 
-    // Check which form is being submitted
+    const address = document.getElementById("address")?.value.trim() || "";
+    const pincode = document.getElementById("pincode")?.value.trim() || "";
+
+    const delivery = document.getElementById("delivery")?.value || "";
+
+    const transaction =
+        document.getElementById("transaction")?.value.trim() || "";
+
+    const notes =
+        document.getElementById("notes")?.value.trim() || "";
+
     const isEnrollmentForm =
         document.getElementById("enrollForm") !== null;
 
-    // Payment screenshot
     const screenshotInput =
         document.getElementById("paymentScreenshot");
 
     // Required fields
-    if (
-        !name ||
-        !phone ||
-        !email ||
-        !address ||
-        !pincode ||
-        !transaction
-    ) {
+
+    if (!name || !phone || !email || !address || !pincode || !transaction) {
+
         alert("Please fill all required fields.");
         return;
+
     }
 
-    // Screenshot required
-    if (
-        !screenshotInput ||
-        !screenshotInput.files.length
-    ) {
+    // Email validation
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+
+        alert("Please enter a valid email address.");
+        return;
+
+    }
+
+    // Screenshot validation
+
+    if (!screenshotInput || !screenshotInput.files.length) {
+
         alert("Please upload payment screenshot.");
         return;
+
     }
 
-    const screenshotFile =
-        screenshotInput.files[0];
+    const screenshotFile = screenshotInput.files[0];
 
-    // Image check
-    if (!screenshotFile.type.startsWith("image/")) {
-        alert("Please upload a valid image file.");
+    if (!["image/jpeg", "image/png", "image/webp"].includes(screenshotFile.type)) {
+
+        alert("Please upload JPG, PNG or WEBP image.");
         return;
+
     }
 
     // Maximum 3 MB
+
     if (screenshotFile.size > 3 * 1024 * 1024) {
-        alert(
-            "Payment screenshot must be less than 3 MB."
-        );
+
+        alert("Payment screenshot must be less than 3 MB.");
         return;
+
     }
 
-    // Convert screenshot to Base64
-    const screenshotBase64 =
-        await fileToBase64(screenshotFile);
+    try {
 
-    // Enrollment or Product Order
-    const formData = {
+        const screenshotBase64 = await fileToBase64(screenshotFile);
 
-        form_type: isEnrollmentForm
-            ? "course_enrollment"
-            : "product_order",
+        const formData = {
 
-        product: product,
-        price: price,
+            form_type: isEnrollmentForm
+                ? "course_enrollment"
+                : "product_order",
 
-        order_id: orderid,
+            product: product,
+            price: price,
 
-        order_date: datetime,
+            order_id: orderid,
+            order_date: datetime,
 
-        name: name,
-        phone: phone,
-        email: email,
+            name: name,
+            phone: phone,
+            email: email,
 
-        address: address,
-        pincode: pincode,
+            address: address,
+            pincode: pincode,
 
-        delivery: delivery,
+            delivery: delivery,
 
-        transaction_id: transaction,
+            transaction_id: transaction,
 
-        notes: notes || "N/A",
+            notes: notes || "N/A",
 
-        payment_screenshot: {
-            file: screenshotBase64,
-            fileName: screenshotFile.name,
-            contentType: screenshotFile.type
+            payment_screenshot: {
+
+                file: screenshotBase64,
+                fileName: screenshotFile.name,
+                contentType: screenshotFile.type
+
+            }
+
+        };
+
+        const button = document.querySelector(".submit-btn");
+
+        if (button) {
+            button.disabled = true;
+            button.innerText = "Submitting...";
         }
-    };
 
-    const saved =
-        await saveToSupabase(formData);
+        const submitted = await submitByEmail(formData);
 
-    if (!saved) {
+        if (!submitted) {
 
-        alert(
-            isEnrollmentForm
-                ? "Enrollment Can't Save. Please try again."
-                : "Order Can't Save. Please try again."
-        );
+            alert("Submission failed. Please try again.");
 
-        return;
+            if (button) {
+                button.disabled = false;
+                button.innerText = "Submit";
+            }
+
+            return;
+
+        }
+
+        // Success
+
+        if (isEnrollmentForm) {
+
+            alert(
+                "Enrollment submitted successfully!\n\n" +
+                "Enrollment ID: " + orderid
+            );
+
+        } else {
+
+            alert(
+                "Order submitted successfully!\n\n" +
+                "Order ID: " + orderid
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error("Submission error:", error);
+
+        alert("Something went wrong. Please try again.");
+
     }
 
-    // Success message
-    if (isEnrollmentForm) {
-
-        alert(
-            "✅ Enrollment submitted successfully!\n\n" +
-            "Enrollment ID: " + orderid
-        );
-
-    } else {
-
-        alert(
-            "✅ Order submitted successfully!\n\n" +
-            "Order ID: " + orderid
-        );
-    }
 }
+
+
 // ==========================
 // FILE TO BASE64
 // ==========================
@@ -188,32 +256,38 @@ function fileToBase64(file) {
         const reader = new FileReader();
 
         reader.onload = () => {
+
             const base64String = reader.result.split(",")[1];
+
             resolve(base64String);
+
         };
 
         reader.onerror = () => {
-            reject(
-                new Error("Unable to read payment screenshot.")
-            );
+
+            reject(new Error("Unable to read payment screenshot."));
+
         };
 
         reader.readAsDataURL(file);
+
     });
+
 }
 
 
 // ==========================
-// SAVE FORM DATA TO SUPABASE
+// SEND FORM THROUGH GMAIL API
 // ==========================
 
-async function saveToSupabase(formData) {
+async function submitByEmail(formData) {
 
     try {
 
         const response = await fetch(
             "/.netlify/functions/submit-form",
             {
+
                 method: "POST",
 
                 headers: {
@@ -221,6 +295,7 @@ async function saveToSupabase(formData) {
                 },
 
                 body: JSON.stringify(formData)
+
             }
         );
 
@@ -228,35 +303,39 @@ async function saveToSupabase(formData) {
 
         if (!response.ok || !result.success) {
 
-            console.error(
-                "Supabase save failed:",
-                result
-            );
+            console.error("Email submission failed:", result);
 
             return false;
+
         }
 
-        console.log(
-            "Form saved successfully:",
-            result
-        );
+        console.log("Email submitted successfully:", result);
 
         return true;
 
     } catch (error) {
 
-        console.error(
-            "Connection error:",
-            error
-        );
+        console.error("Connection error:", error);
 
         return false;
+
     }
+
 }
+
+
+// ==========================
+// MALDIVES POPUP
+// ==========================
+
 function closeMaldivesPopup() {
+
     const popup = document.getElementById("maldivesPopup");
 
     if (popup) {
+
         popup.style.display = "none";
+
     }
+
 }
