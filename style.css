@@ -2976,3 +2976,312 @@ transform:scale(1.08);
         padding: 12px;
     }
 }
+/* JOB POPUP */
+
+.job-popup-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+    z-index: 99999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.job-popup-box {
+    position: relative;
+    display: flex;
+    max-width: 850px;
+    width: 100%;
+    background: #151515;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #b6ff00;
+    box-shadow: 0 0 35px rgba(182, 255, 0, 0.2);
+    animation: jobPopupShow 0.4s ease;
+}
+
+.job-popup-image {
+    width: 45%;
+}
+
+.job-popup-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.job-popup-content {
+    width: 55%;
+    padding: 45px 30px;
+    color: white;
+}
+
+.job-popup-tag {
+    color: #b6ff00;
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.job-popup-content h2 {
+    font-size: 38px;
+    color: #b6ff00;
+    margin: 15px 0;
+}
+
+.job-popup-content h3 {
+    font-size: 21px;
+    margin-bottom: 15px;
+}
+
+.job-popup-content p {
+    color: #ccc;
+    line-height: 1.7;
+}
+
+.job-popup-content button {
+    margin-top: 25px;
+    padding: 14px 28px;
+    background: #b6ff00;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.job-popup-close {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+@keyframes jobPopupShow {
+    from {
+        opacity: 0;
+        transform: scale(0.85);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@media (max-width: 600px) {
+    .job-popup-box {
+        flex-direction: column;
+        max-width: 400px;
+    }
+
+    .job-popup-image {
+        width: 100%;
+        height: 200px;
+    }
+
+    .job-popup-content {
+        width: 100%;
+        padding: 25px;
+    }
+
+    .job-popup-content h2 {
+        font-size: 30px;
+    }
+}
+```css
+/* WELCOME POPUP DESIGN */
+
+#welcomePopup {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 100000;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+.welcome-popup-box {
+    position: relative;
+    width: 90%;
+    max-width: 750px;
+    max-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-popup-box img {
+    width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    display: block;
+    border-radius: 12px;
+}
+
+.welcome-popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100002;
+    width: 45px;
+    height: 45px;
+    border: 2px solid #000;
+    border-radius: 50%;
+    background: #fff;
+    color: #000;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@media (max-width: 600px) {
+    .welcome-popup-box {
+        width: 96%;
+    }
+
+    .welcome-popup-close {
+        width: 38px;
+        height: 38px;
+        font-size: 25px;
+    }
+}
+```css
+/* =================================
+   SECOND WELCOME POPUP
+================================= */
+
+#welcomePopup2 {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.88);
+    z-index: 100001;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    box-sizing: border-box;
+}
+
+/* POPUP IMAGE CONTAINER */
+
+#welcomePopup2 .welcome-popup2-box {
+    position: relative;
+    width: 90%;
+    max-width: 750px;
+    max-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* POPUP IMAGE */
+
+#welcomePopup2 .welcome-popup2-box img {
+    width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    display: block;
+    border-radius: 12px;
+}
+
+/* CLOSE BUTTON */
+
+#welcomePopup2 .welcome-popup2-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 100002;
+
+    width: 45px;
+    height: 45px;
+
+    border: 2px solid black;
+    border-radius: 50%;
+
+    background: white;
+    color: black;
+
+    font-size: 30px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 600px) {
+
+    #welcomePopup2 .welcome-popup2-box {
+        width: 96%;
+    }
+
+    #welcomePopup2 .welcome-popup2-box img {
+        max-height: 80vh;
+    }
+
+    #welcomePopup2 .welcome-popup2-close {
+        width: 38px;
+        height: 38px;
+        font-size: 25px;
+    }
+}
+/* SECOND POPUP BIG SIZE FIX */
+
+#welcomePopup2 .welcome-popup2-box {
+    width: 95%;
+    max-width: 1100px;
+    max-height: 95vh;
+}
+
+#welcomePopup2 .welcome-popup2-box img {
+    width: 100%;
+    max-height: 92vh;
+    object-fit: contain;
+}
+/* SECOND POPUP SIZE FIX */
+
+#welcomePopup2 {
+    padding: 10px !important;
+}
+
+#welcomePopup2 .welcome-popup2-box {
+    width: min(90vw, 550px) !important;
+    max-width: 550px !important;
+    max-height: 95vh !important;
+    position: relative;
+}
+
+#welcomePopup2 .welcome-popup2-box img {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 92vh !important;
+    object-fit: contain !important;
+    display: block !important;
+}
+
+#welcomePopup2 .welcome-popup2-close {
+    top: 5px;
+    right: 5px;
+    z-index: 100010;
+}

@@ -270,5 +270,55 @@ jobForm.addEventListener("submit", async function(event) {
 
 </script>
 
+<!-- JOB POPUP -->
+<div id="jobPopup" class="job-popup-overlay">
+
+    <div class="job-popup-box">
+
+        <button class="job-popup-close" onclick="closeJobPopup()">
+            &times;
+        </button>
+
+        <div class="job-popup-image">
+            <img src="Images/job-popup.jpg" alt="Kamal Shuttler Academy Hiring">
+        </div>
+
+        <div class="job-popup-content">
+
+            <span class="job-popup-tag">CAREER OPPORTUNITY</span>
+
+            <h2>WE'RE HIRING!</h2>
+
+            <h3>Join Kamal Shuttler Academy</h3>
+
+            <p>
+                Turn your passion for badminton into a professional career.
+                Explore exciting coaching opportunities with our academy.
+            </p>
+
+            <button onclick="closeJobPopup(); document.getElementById('jobApplicationForm').scrollIntoView({behavior:'smooth'});">
+                Apply Now →
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+window.addEventListener("load", function () {
+
+    const params = new URLSearchParams(window.location.search);
+    const popup = document.getElementById("jobPopup");
+
+    if (popup && params.get("popup") === "1") {
+        setTimeout(function () {
+            popup.style.display = "flex";
+        }, 500);
+    }
+
+});
+</script>
+<script src="script.js" defer></script>
 </body>
 </html>

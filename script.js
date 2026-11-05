@@ -339,3 +339,43 @@ function closeMaldivesPopup() {
     }
 
 }
+
+// JOB POPUP
+
+function openJobPopup() {
+    const popup = document.getElementById("jobPopup");
+
+    if (popup) {
+        popup.style.display = "flex";
+    }
+}
+
+function closeJobPopup() {
+    const popup = document.getElementById("jobPopup");
+
+    if (popup) {
+        popup.style.display = "none";
+    }
+}
+
+window.addEventListener("load", function () {
+
+    const popup = document.getElementById("jobPopup");
+
+    if (!popup) return;
+
+    const params = new URLSearchParams(window.location.search);
+
+    if (params.get("popup") === "1") {
+        setTimeout(function () {
+            popup.style.display = "flex";
+        }, 500);
+    }
+
+    popup.addEventListener("click", function (event) {
+        if (event.target === popup) {
+            closeJobPopup();
+        }
+    });
+
+});

@@ -61,7 +61,7 @@
 <a href="#contact">Contact</a>
 <a href="#business">Business</a>
 <a href="#Pdf-Guide">Pdf Guide</a>
-<a href="#jobs">Jobs</a>
+<a href="#jobs" id="homeJobsLink">Jobs</a>
 <a href="#camp">camp</a>
 </nav>
 
@@ -243,7 +243,7 @@ Build speed, strength, endurance and agility with a complete 6-week fitness prog
 
 <a href="course-fitness.html" class="btn">Watch Video</a>
 
-<a href="enroll.html?course=Badminton Fitness Blueprint" class="btn2">
+<a href="enroll.html?course=Badminton%20Fitness%20Blueprint&price=5000" class="btn2">
     Enroll Now
 </a>
 
@@ -261,9 +261,10 @@ Improve court movement, balance and explosive footwork like professional players
 
 <a href="course-footwork.html" class="btn">Watch Video</a>
 
-<a href="enroll.html?course=7 Week Footwork Program" class="btn2">
+<a href="enroll.html?course=7%20Week%20Footwork%20Program&price=5000" class="btn2">
     Enroll Now
 </a>
+
 </div>
 
 <div class="course-card">
@@ -278,7 +279,7 @@ Master every badminton grip with practical drills and professional guidance.
 
 <a href="course-grip.html" class="btn">Watch Video</a>
 
-<a href="enroll.html?course=Grip Masterclass" class="btn2">
+<a href="enroll.html?course=Grip%20Course&price=1500" class="btn2">
     Enroll Now
 </a>
 
@@ -296,7 +297,7 @@ Learn nutrition, recovery and injury prevention to improve performance.
 
 <a href="#" class="btn">Learn More</a>
 
-<a href="enroll.html?course=Diet%20%26%20Injury%20Prevention" class="btn2">
+<a href="enroll.html?course=Diet%20Course&price=1000" class="btn2">
     Enroll Now
 </a>
 
@@ -826,9 +827,167 @@ across different countries.
 
 </section>
 
+<!-- JOB HIRING POPUP -->
+
+<div id="jobPopup" class="job-popup-overlay">
+
+    <div class="job-popup-box">
+
+        <button class="job-popup-close" onclick="closeJobPopup()">
+            &times;
+        </button>
+
+        <div class="job-popup-image">
+            <img src="Images/job-popup.jpg" alt="Kamal Shuttler Academy Hiring">
+        </div>
+
+        <div class="job-popup-content">
+
+            <span class="job-popup-tag">CAREER OPPORTUNITY</span>
+
+            <h2>WE'RE HIRING!</h2>
+
+            <h3>Join Kamal Shuttler Academy</h3>
+
+            <p>
+                Turn your passion for badminton into a professional career.
+                Explore exciting coaching opportunities with our academy.
+            </p>
+
+            <button onclick="window.location.href='jobs.html#jobApplicationForm'">
+                Apply Now →
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+<!-- WELCOME POPUP STYLES -->
+<style>
+#welcomePopup,
+#welcomePopup2 {
+    display: none;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.88);
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#welcomePopup {
+    z-index: 100000;
+}
+
+#welcomePopup2 {
+    z-index: 100001;
+}
+
+.welcome-popup-box,
+.welcome-popup2-box {
+    position: relative;
+    width: 90vw;
+    max-width: 550px;
+    max-height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.welcome-popup-box img,
+.welcome-popup2-box img {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 85vh !important;
+    object-fit: contain;
+    display: block;
+    border-radius: 12px;
+}
+
+.welcome-popup-close,
+.welcome-popup2-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 100010;
+    width: 45px;
+    height: 45px;
+    background: white;
+    color: black;
+    border: 2px solid black;
+    border-radius: 50%;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+}
+</style>
 
 
+<!-- FIRST WELCOME POPUP -->
 
+<div id="welcomePopup">
+
+    <div class="welcome-popup-box">
+
+        <button class="welcome-popup-close">&times;</button>
+
+        <img src="Images/welcome-popup.jpg" alt="Welcome">
+
+    </div>
+
+</div>
+
+
+<!-- SECOND WELCOME POPUP -->
+
+<div id="welcomePopup2">
+
+    <div class="welcome-popup2-box">
+
+        <button class="welcome-popup2-close">&times;</button>
+
+        <img src="Images/welcome-popup 2.jpg"
+             alt="Welcome Announcement">
+
+    </div>
+
+</div>
+
+
+<!-- POPUP SEQUENCE SCRIPT -->
+
+<script>
+window.addEventListener("load", function () {
+
+    const firstPopup = document.getElementById("welcomePopup");
+    const secondPopup = document.getElementById("welcomePopup2");
+
+    const firstClose = document.querySelector(".welcome-popup-close");
+    const secondClose = document.querySelector(".welcome-popup2-close");
+
+    // FIRST POPUP
+    setTimeout(function () {
+        firstPopup.style.display = "flex";
+    }, 700);
+
+    // FIRST POPUP CLOSE
+    firstClose.addEventListener("click", function () {
+        firstPopup.style.display = "none";
+        secondPopup.style.display = "flex";
+    });
+
+    // SECOND POPUP CLOSE
+    secondClose.addEventListener("click", function () {
+        secondPopup.style.display = "none";
+    });
+
+});
+</script>
 
 <!-- Footer -->
 
@@ -844,9 +1003,21 @@ Designed by Web Developer J.H.Kamal
 
 </footer>
 
+<script src="script.js" defer></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const jobsLink = document.getElementById("homeJobsLink");
+    const popup = document.getElementById("jobPopup");
 
-
-<script src="script.js"></script>
+    if (jobsLink && popup) {
+        jobsLink.addEventListener("click", function () {
+            setTimeout(function () {
+                popup.style.display = "flex";
+        }, 500);
+        });
+    }
+});
+</script>
 
 </body>
 </html>
