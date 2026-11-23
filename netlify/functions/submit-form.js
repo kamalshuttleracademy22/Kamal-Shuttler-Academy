@@ -1,3 +1,5 @@
+const { getStore, connectLambda } = require("@netlify/blobs");
+const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 
 exports.handler = async (event) => {
@@ -17,55 +19,33 @@ exports.handler = async (event) => {
             })
         };
     }
-
     try {
+const requestData = JSON.parse(event.body || "{}");
 
-        // Gmail configuration from Netlify environment variables
-        const {
-            GMAIL_USER,
-            GMAIL_APP_PASSWORD,
-            RECEIVING_EMAIL
-        } = process.env;
+const allowedTypes = [
+    "course_enrollment",
+    "product_order",
+    "job_application",
+    "camp_booking",
+    "contact_message"
+];
 
-        if (!GMAIL_USER || !GMAIL_APP_PASSWORD || !RECEIVING_EMAIL) {
-            throw new Error("Email configuration missing");
-        }
-
-        const requestData = JSON.parse(event.body || "{}");
-
-        // Supported form types
-        const allowedTypes = [
-            "course_enrollment",
-            "product_order",
-            "job_application",
-            "camp_booking",
-            "contact_message"
-        ];
-
-        if (!allowedTypes.includes(requestData.form_type)) {
-            return {
-                statusCode: 400,
-                headers,
-                body: JSON.stringify({
-                    success: false,
-                    message: "Invalid form type"
-                })
-            };
-        }
-
-        // Gmail transporter
-        const transporter = nodemailer.createTransport({
-            service: "gmail",
-            auth: {
-                user: GMAIL_USER,
-                pass: GMAIL_APP_PASSWORD
-            }
-        });
-
+if (!allowedTypes.includes(requestData.form_type)) {
+    return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({
+            success: false,
+            message: "Invalid form type"
+        })
+    };
+}
         let emailBody = "";
         let subject = "";
         let replyTo;
         const attachments = [];
+        let submissionId = null;
+let savedFileKeys = [];
 
         // =====================================
         // JOB APPLICATION
@@ -208,13 +188,13 @@ exports.handler = async (event) => {
                 };
             }
 
-            if (totalSize > 2 * 1024 * 1024) {
+            if (totalSize > 10 * 1024 * 1024) {
                 return {
                     statusCode: 400,
                     headers,
                     body: JSON.stringify({
                         success: false,
-                        message: "All documents together must be under 2 MB."
+                        message: "All documents together must be under 10 MB."
                     })
                 };
             }
@@ -610,49 +590,94 @@ ${data.notes || "N/A"}
 `;
 
         }
+// SAVE SUBMISSION TO NETLIFY BLOBS
+connectLambda(event);
+submissionId = crypto.randomUUID();
 
-        // =====================================
-        // SEND EMAIL
-        // =====================================
+const filesStore = getStore("academy-submission-files");
+const submissionsStore = getStore("academy-submissions");
 
-        await transporter.sendMail({
+const savedFiles = [];
 
-            from: `"Kamal Shuttler Academy" <${GMAIL_USER}>`,
+try {
+    for (let i = 0; i < attachments.length; i++) {
+        const file = attachments[i];
 
-            to: RECEIVING_EMAIL,
+        const safeName = String(file.filename || `file-${i}`)
+            .replace(/[^a-zA-Z0-9._-]/g, "_");
 
-            replyTo,
+        const fileKey = `${submissionId}/${i}-${safeName}`;
 
-            subject,
-
-            text: emailBody,
-
-            attachments
-
+        await filesStore.set(fileKey, file.content, {
+            metadata: {
+                fileName: safeName,
+                contentType: file.contentType || "application/octet-stream"
+            }
         });
 
-        return {
-            statusCode: 200,
-            headers,
-            body: JSON.stringify({
-                success: true,
-                message: "Form submitted successfully."
-            })
-        };
+        savedFileKeys.push(fileKey);
 
-    } catch (error) {
-
-        console.error("Email submission error:", error);
-
-        return {
-            statusCode: 500,
-            headers,
-            body: JSON.stringify({
-                success: false,
-                message: "Unable to submit form. Please try again."
-            })
-        };
-
+        savedFiles.push({
+            key: fileKey,
+            fileName: safeName,
+            contentType: file.contentType || "application/octet-stream",
+            size: file.content.length
+        });
     }
 
+    const isDirectForm = [
+        "course_enrollment",
+        "product_order"
+    ].includes(requestData.form_type);
+
+    const submissionData = isDirectForm
+        ? { ...requestData }
+        : { ...(requestData.data || {}) };
+
+    // Never store payment screenshot base64 inside the submission record.
+    delete submissionData.payment_screenshot;
+
+    await submissionsStore.setJSON(submissionId, {
+        id: submissionId,
+        form_type: requestData.form_type,
+        data: submissionData,
+        attachments: savedFiles,
+        status: "Pending",
+        submittedAt: new Date().toISOString()
+    });
+
+} catch (storageError) {
+    console.error("Submission storage error:", storageError);
+
+    await Promise.all(
+        savedFileKeys.map(key => filesStore.delete(key).catch(() => {}))
+    );
+
+    throw new Error("Unable to save submission");
+}
+       // Gmail temporarily disabled.
+// Submission is saved to Netlify Blobs.
+
+return {
+    statusCode: 200,
+    headers,
+    body: JSON.stringify({
+        success: true,
+        message: "Form submitted successfully.",
+        submissionId
+    })
+};
+
+} catch (error) {
+    console.error("Submission error:", error);
+
+    return {
+        statusCode: 500,
+        headers,
+        body: JSON.stringify({
+            success: false,
+            message: "Unable to save submission."
+        })
+    };
+}
 };

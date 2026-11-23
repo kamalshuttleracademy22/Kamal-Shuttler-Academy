@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | Kamal Shuttler Academy</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #090909;
+            color: white;
+            padding: 20px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+            background: #181818;
+            border: 1px solid #d4a900;
+            border-radius: 18px;
+            padding: 40px 30px;
+            box-shadow: 0 15px 50px #000;
+        }
+
+        .logo {
+            text-align: center;
+            color: #facc15;
+            font-size: 27px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 30px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ddd;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #444;
+            border-radius: 9px;
+            background: #090909;
+            color: white;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #facc15;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: #facc15;
+            color: black;
+            border: none;
+            border-radius: 9px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #eab308;
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        #message {
+            text-align: center;
+            margin-top: 18px;
+            color: #ff7777;
+            font-size: 14px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #777;
+            font-size: 12px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-card">
+
+        <div class="logo">KAMAL SHUTTLER</div>
+
+        <h2>Admin Login</h2>
+
+        <p class="subtitle">
+            Academy Management Dashboard
+        </p>
+
+        <form id="loginForm">
+
+            <label for="email">Admin Email</label>
+
+            <input
+                type="email"
+                id="email"
+                placeholder="Enter admin email"
+                required
+            >
+
+            <label for="password">Password</label>
+
+            <input
+                type="password"
+                id="password"
+                placeholder="Enter password"
+                required
+            >
+
+            <button type="submit" id="loginButton">
+                Login to Dashboard
+            </button>
+
+        </form>
+
+        <p id="message"></p>
+
+        <div class="footer">
+            © 2026 Kamal Shuttler Academy
+        </div>
+
+    </div>
+
+    <script>
+        const loginForm = document.getElementById("loginForm");
+        const loginButton = document.getElementById("loginButton");
+        const message = document.getElementById("message");
+
+        loginForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            loginButton.disabled = true;
+            loginButton.textContent = "Logging in...";
+            message.textContent = "";
+
+            try {
+                const response = await fetch(
+                    "/.netlify/functions/admin-auth",
+                    {
+                        method: "POST",
+                        credentials: "same-origin",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            action: "login",
+                            email: document.getElementById("email").value,
+                            password: document.getElementById("password").value
+                        })
+                    }
+                );
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(result.message || "Login failed");
+                }
+
+                window.location.href = "/admin/dashboard.html";
+
+            } catch (error) {
+                message.textContent = error.message;
+            }
+
+            loginButton.disabled = false;
+            loginButton.textContent = "Login to Dashboard";
+        });
+    </script>
+
+</body>
+</html>

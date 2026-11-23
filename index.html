@@ -19,6 +19,24 @@
 
 <body>
 
+    <!-- Course Popup -->
+<div id="coursePopup" class="course-popup">
+  <div class="course-popup-content">
+
+    <button class="popup-close" onclick="closeCoursePopup()">×</button>
+
+    <img
+      src="images/course-popup.jpg"
+      alt="Coach Kamal Complete Badminton Masterclass"
+    >
+
+    <button class="continue-enroll" onclick="continueEnrollment()">
+      Continue to Enroll →
+    </button>
+
+  </div>
+</div>
+
     <!-- Maldives Camp Popup -->
 <div id="maldivesPopup" class="ad-popup">
 
@@ -201,7 +219,9 @@ Indonesia No 1
 
 <div class="about-buttons">
 
-<a href="#courses" class="btn">
+<a href="javascript:void(0)" class="btn" onclick="openCoursePopup()">
+  Buy Courses
+</a>
 Trained With Me
 </a>
 
@@ -243,7 +263,9 @@ Build speed, strength, endurance and agility with a complete 6-week fitness prog
 
 <a href="course-fitness.html" class="btn">Watch Video</a>
 
-<a href="enroll.html?course=Badminton%20Fitness%20Blueprint&price=5000" class="btn2">
+<a href="enroll.html?course=Badminton%20Fitness%20Blueprint&price=5000"
+   class="btn2"
+   onclick="openCoursePopup(this); return false;"
     Enroll Now
 </a>
 
@@ -260,8 +282,9 @@ Improve court movement, balance and explosive footwork like professional players
 </p>
 
 <a href="course-footwork.html" class="btn">Watch Video</a>
-
-<a href="enroll.html?course=7%20Week%20Footwork%20Program&price=5000" class="btn2">
+<a href="enroll.html?course=7%20Week%20Footwork%20Program&price=5000"
+   class="btn2"
+   onclick="openCoursePopup(this); return false;"
     Enroll Now
 </a>
 
@@ -279,7 +302,9 @@ Master every badminton grip with practical drills and professional guidance.
 
 <a href="course-grip.html" class="btn">Watch Video</a>
 
-<a href="enroll.html?course=Grip%20Course&price=1500" class="btn2">
+<a href="enroll.html?course=Grip%20Course&price=1500"
+   class="btn2"
+onclick="openCoursePopup(this); return false;"
     Enroll Now
 </a>
 
@@ -297,7 +322,9 @@ Learn nutrition, recovery and injury prevention to improve performance.
 
 <a href="#" class="btn">Learn More</a>
 
-<a href="enroll.html?course=Diet%20Course&price=1000" class="btn2">
+<a href="enroll.html?course=Diet%20Course&price=1000"
+   class="btn2"
+   onclick="openCoursePopup(this); return false;"
     Enroll Now
 </a>
 
@@ -557,6 +584,7 @@ contactForm.addEventListener("submit", async function(event) {
 <img src="images/achievement19.jpg">
 <img src="images/achievement20.jpg">
 <img src="images/achievement21.jpg">
+<img src="images/achievement22.jpg">
 
 
 </div>

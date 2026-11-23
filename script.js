@@ -379,3 +379,33 @@ window.addEventListener("load", function () {
     });
 
 });
+let selectedCourseUrl = "";
+
+function openCoursePopup(button) {
+  selectedCourseUrl = button.href;
+  document.getElementById("coursePopup").style.display = "flex";
+}
+
+function continueEnrollment() {
+  if (selectedCourseUrl) {
+    window.location.href = selectedCourseUrl;
+  } else {
+    alert("Please select a course first.");
+  }
+}
+
+function closeCoursePopup() {
+  document.getElementById("coursePopup").style.display = "none";
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const popup = document.getElementById("coursePopup");
+
+  if (popup) {
+    popup.addEventListener("click", function (e) {
+      if (e.target === popup) {
+        closeCoursePopup();
+      }
+    });
+  }
+});
