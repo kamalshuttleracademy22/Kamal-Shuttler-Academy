@@ -324,21 +324,7 @@ async function submitByEmail(formData) {
 }
 
 
-// ==========================
-// MALDIVES POPUP
-// ==========================
 
-function closeMaldivesPopup() {
-
-    const popup = document.getElementById("maldivesPopup");
-
-    if (popup) {
-
-        popup.style.display = "none";
-
-    }
-
-}
 
 // JOB POPUP
 
@@ -379,33 +365,39 @@ window.addEventListener("load", function () {
     });
 
 });
-let selectedCourseUrl = "";
+// ==========================
+// COURSE POPUP
+// ==========================
 
 function openCoursePopup(button) {
-  selectedCourseUrl = button.href;
-  document.getElementById("coursePopup").style.display = "flex";
+    window.location.href = button.href;
 }
 
 function continueEnrollment() {
-  if (selectedCourseUrl) {
-    window.location.href = selectedCourseUrl;
-  } else {
-    alert("Please select a course first.");
-  }
+    closeCoursePopup();
 }
 
 function closeCoursePopup() {
-  document.getElementById("coursePopup").style.display = "none";
+    const popup = document.getElementById("coursePopup");
+
+    if (popup) {
+        popup.style.display = "none";
+    }
 }
 
+// Show popup automatically when website opens
 document.addEventListener("DOMContentLoaded", function () {
-  const popup = document.getElementById("coursePopup");
 
-  if (popup) {
-    popup.addEventListener("click", function (e) {
-      if (e.target === popup) {
-        closeCoursePopup();
-      }
-    });
-  }
+    const popup = document.getElementById("coursePopup");
+
+    if (popup) {
+        popup.style.display = "flex";
+
+        popup.addEventListener("click", function (e) {
+            if (e.target === popup) {
+                closeCoursePopup();
+            }
+        });
+    }
+
 });
