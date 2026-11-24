@@ -112,6 +112,43 @@ Currently Working
 <textarea name="About Yourself" placeholder="Tell Us About Yourself"></textarea>
 
 <textarea name="Other Expectations" placeholder="Other Expectations"></textarea>
+<!-- SECURITY PAYMENT SECTION -->
+
+<h2>💳 Security Payment</h2>
+
+<p>
+Please scan the QR code below to complete your security payment.
+</p>
+
+<div class="job-payment-section">
+
+    <img
+        src="Images/qrcode.jpg"
+        alt="Security Payment QR Code"
+        class="job-payment-qr"
+    >
+
+    <p><strong>Scan QR Code to Pay</strong></p>
+
+    <label for="paymentUTR">Transaction ID / UTR Number</label>
+    <input
+        type="text"
+        id="paymentUTR"
+        name="Payment Transaction ID"
+        placeholder="Enter Transaction ID / UTR"
+        required
+    >
+
+    <label for="paymentScreenshot">Upload Payment Screenshot</label>
+    <input
+        type="file"
+        id="paymentScreenshot"
+        name="Payment Screenshot"
+        accept="image/*"
+        required
+    >
+
+</div>
 
 <h2>📎 Upload Documents</h2>
 
@@ -158,12 +195,14 @@ jobForm.addEventListener("submit", async function(event) {
         document.getElementById("certificates").files
     );
     const photo = document.getElementById("photo").files[0];
+    const paymentScreenshot = document.getElementById("paymentScreenshot").files[0];
 
-    const files = [
-        resume,
-        ...certificates,
-        ...(photo ? [photo] : [])
-    ].filter(Boolean);
+   const files = [
+    resume,
+    ...certificates,
+    ...(photo ? [photo] : []),
+    ...(paymentScreenshot ? [paymentScreenshot] : [])
+].filter(Boolean);
 
     const totalSize = files.reduce((total, file) => total + file.size, 0);
 
@@ -181,6 +220,10 @@ jobForm.addEventListener("submit", async function(event) {
         message.textContent = "Please upload your resume in PDF format.";
         return;
     }
+    if (paymentScreenshot && !paymentScreenshot.type.startsWith("image/")) {
+    message.textContent = "Please upload a valid payment screenshot.";
+    return;
+}
 
     button.disabled = true;
     button.textContent = "Submitting...";
@@ -223,11 +266,13 @@ jobForm.addEventListener("submit", async function(event) {
 
             });
 
-            attachments.push({
-                fileName: file.name,
-                contentType: file.type || "application/octet-stream",
-                file: base64
-            });
+           attachments.push({
+    fileName: file === paymentScreenshot
+        ? `payment-proof-${file.name}`
+        : file.name,
+    contentType: file.type || "application/octet-stream",
+    file: base64
+});
 
         }
 

@@ -65,6 +65,8 @@ let savedFileKeys = [];
                 !data["Mobile Number"].trim() ||
                 typeof data["Job Position"] !== "string" ||
                 !data["Job Position"].trim() ||
+                  typeof data["Payment Transaction ID"] !== "string" ||
+                  !data["Payment Transaction ID"].trim() ||
                 data["Terms Accepted"] !== "Yes"
             ) {
                 return {
@@ -187,6 +189,22 @@ let savedFileKeys = [];
                     })
                 };
             }
+            const hasPaymentScreenshot = uploadedFiles.some(file =>
+    typeof file.fileName === "string" &&
+    file.fileName.startsWith("payment-proof-") &&
+    ["image/jpeg", "image/png", "image/webp"].includes(file.contentType)
+);
+
+if (!hasPaymentScreenshot) {
+    return {
+        statusCode: 400,
+        headers,
+        body: JSON.stringify({
+            success: false,
+            message: "Please upload your payment screenshot."
+        })
+    };
+}
 
             if (totalSize > 10 * 1024 * 1024) {
                 return {
@@ -247,9 +265,17 @@ ADDITIONAL INFORMATION
 About: ${data["About Yourself"] || "N/A"}
 Other Expectations: ${data["Other Expectations"] || "N/A"}
 
+PAYMENT DETAILS
+
+Transaction ID / UTR: ${data["Payment Transaction ID"] || "N/A"}
+Payment Screenshot: ${attachments.some(file =>
+    file.fileName?.startsWith("payment-proof-")
+) ? "Uploaded" : "Not uploaded"}
+
+
 ATTACHMENTS
 
-${attachments.map(file => file.filename).join("\n")}
+${attachments.map(file => file.fileName).join("\n")}
 `;
 
         }
